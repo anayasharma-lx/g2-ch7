@@ -1,100 +1,309 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Chapter 7 · Subtraction of Greater Numbers</title>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 7 · Subtraction of Greater Numbers</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--burg:#5A1A00;--wood:#8B4513;--gold:#D4A017;--goldl:#F5C518;--cream:#FFF8E8;--red:#C0392B}
-html,body{width:100%;min-height:100vh}
-body{font-family:'Nunito',sans-serif;background:linear-gradient(180deg,#3A0A00 0%,#5A1A00 40%,#8B4513 100%);min-height:100vh;padding:0 0 32px;display:flex;flex-direction:column;align-items:center;}
-.chest-header{width:100%;background:linear-gradient(135deg,#3A0A00,#5A1A00);padding:16px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:3px solid var(--gold);position:relative;}
-.gold-shine{position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--goldl),transparent);animation:shine 2s ease infinite}
-@keyframes shine{0%{opacity:0;transform:translateX(-100%)}50%{opacity:1}100%{opacity:0;transform:translateX(100%)}}
-.ch-title{font-family:'Fredoka One',cursive;font-size:26px;color:var(--goldl);z-index:1;text-shadow:0 0 16px rgba(245,197,24,.4)}
-.ch-chip{background:var(--gold);color:#3A0A00;font-size:12px;font-weight:900;padding:5px 14px;border-radius:20px;z-index:1;border:2px solid rgba(255,255,255,.2)}
-.page{width:100%;max-width:580px;padding:16px;display:flex;flex-direction:column;gap:20px}
-.tcard{background:var(--cream);border-radius:24px;padding:22px;box-shadow:0 6px 0 rgba(0,0,0,.25),0 2px 24px rgba(0,0,0,.2);border:3px solid rgba(255,248,232,.9);position:relative;overflow:hidden}
-.tcard::before{content:'';position:absolute;top:0;left:0;right:0;height:6px;border-radius:24px 24px 0 0;background:var(--gold)}
-.tc-title{font-family:'Fredoka One',cursive;font-size:20px;color:var(--burg);margin-bottom:4px}
-.hint{font-size:13px;font-weight:700;color:var(--wood);margin-bottom:16px;line-height:1.5}
-.col-wrapper{display:flex;justify-content:center;margin-bottom:20px}
-.sum-table{display:grid;grid-template-columns:64px 72px 72px;row-gap:0;align-items:center}
-.cell{width:72px;height:62px;display:flex;align-items:center;justify-content:center;border-radius:10px;font-family:'Fredoka One',cursive;font-size:44px;color:var(--burg)}
-.cell.on{background:#FFE8C0}
-.cell.crossed{color:#C0A080;font-size:36px;text-decoration:line-through}
-.hdr{width:72px;height:30px;display:flex;align-items:center;justify-content:center;font-family:'Fredoka One',cursive;font-size:14px;text-transform:uppercase;letter-spacing:.06em;color:#AAA;border-radius:8px}
-.hdr.on{color:var(--wood);background:#FFE8C0}
-.bw-wrap{width:72px;height:32px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end}
-.bw-old{font-family:'Fredoka One',cursive;font-size:14px;color:#9CA3AF;text-decoration:line-through;line-height:1.1}
-.bw-new{font-family:'Fredoka One',cursive;font-size:20px;color:var(--red);line-height:1.1}
-.op{width:64px;height:62px;display:flex;align-items:center;justify-content:center;font-family:'Fredoka One',cursive;font-size:36px;color:var(--red)}
-.ans-cell{width:72px;height:68px;display:flex;align-items:center;justify-content:center;border-radius:14px;border:3px solid #F5DFA0;background:#FFF8E8}
-.ans-cell.on{border-color:var(--gold);background:#FFE8C0}
-.ans-cell.done{border-color:#16A34A;background:#D4F5D4}
-.ans-cell.err{border-color:var(--red);background:#FFE0E0;animation:shake .35s}
-@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
-.ans-input{font-family:'Fredoka One',cursive;font-size:44px;font-weight:400;width:60px;height:60px;border:none;background:transparent;text-align:center;color:var(--burg);outline:none;-moz-appearance:textfield}
+:root{
+  --accent:#B45309;--accent-light:#FFFBEB;--accent-mid:#FDE68A;
+  --accent-dark:#92400E;--bg:#F7F8FA;--surface:#FFFFFF;
+  --ink:#1C2B2B;--ink2:#4B6060;--border:#E4EAE9;
+  --success:#16A34A;--success-bg:#DCFCE7;
+  --error:#DC2626;--error-bg:#FEE2E2;
+  --borrow:#DC2626;
+}
+html,body{width:100%;min-height:100vh;font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);overflow-x:hidden}
+
+.header{width:100%;background:var(--surface);border-bottom:2px solid var(--border);padding:16px 20px 0;display:flex;flex-direction:column;align-items:center;position:sticky;top:0;z-index:100}
+.header-row{width:100%;max-width:640px;display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.chapter-label{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);background:var(--accent-light);padding:4px 12px;border-radius:20px}
+.header-title{font-size:20px;font-weight:900;color:var(--ink)}
+.tabs{display:flex;gap:4px;width:100%;max-width:640px}
+.tab{flex:1;padding:10px 0;text-align:center;font-size:14px;font-weight:800;cursor:pointer;border-bottom:3px solid transparent;color:var(--ink2);transition:all .2s;border-radius:8px 8px 0 0}
+.tab:hover{color:var(--accent);background:var(--accent-light)}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+
+.page{width:100%;max-width:640px;margin:0 auto;padding:24px 16px 40px;display:flex;flex-direction:column;gap:20px}
+.panel{display:none}.panel.active{display:flex;flex-direction:column;gap:20px}
+
+.card{background:var(--surface);border-radius:16px;padding:22px;border:1.5px solid var(--border);box-shadow:0 2px 8px rgba(0,0,0,.05);position:relative}
+.card-accent{position:absolute;top:0;left:0;bottom:0;width:4px;border-radius:16px 0 0 16px}
+.card-accent.amber{background:var(--accent)}
+.card-accent.green{background:#16A34A}
+.card-title{font-size:17px;font-weight:900;color:var(--ink);margin-bottom:4px;padding-left:12px}
+.card-sub{font-size:13px;font-weight:700;color:var(--ink2);margin-bottom:18px;padding-left:12px;line-height:1.5}
+
+/* ── COLUMN TABLE ── */
+.instr-box{background:var(--accent-light);border:1.5px solid var(--accent-mid);border-radius:12px;padding:14px 16px;margin-bottom:16px;font-size:14px;font-weight:700;color:var(--ink);line-height:1.8}
+.instr-box strong{color:var(--accent-dark)}
+.borrow-note{color:var(--borrow);font-weight:900}
+
+.col-wrap{display:flex;justify-content:center;margin-bottom:20px;overflow-x:auto;padding-bottom:4px}
+@media(max-width:400px){.num-cell{width:50px;height:48px;font-size:34px}.hdr{width:50px;height:26px}.borrow-cell{width:50px}.ans-cell{width:50px;height:52px}.ans-input{width:40px;height:40px;font-size:34px}.op-cell{width:38px;font-size:26px}.borrow-new{font-size:16px}.borrow-old{font-size:11px}}
+.sum-table{display:grid;row-gap:0;align-items:center}
+
+.hdr{height:28px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:var(--ink2);border-radius:6px}
+.hdr.active-col{color:var(--accent-dark);background:var(--accent-light)}
+
+.borrow-cell{width:64px;height:30px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end}
+.borrow-old{font-size:13px;font-weight:900;color:#9CA3AF;text-decoration:line-through;line-height:1}
+.borrow-new{font-size:19px;font-weight:900;color:var(--borrow);line-height:1}
+
+.num-cell{width:64px;height:58px;display:flex;align-items:center;justify-content:center;font-size:40px;font-weight:900;color:var(--ink);border-radius:10px}
+.num-cell.active-col{background:var(--accent-light)}
+.num-cell.crossed{color:#C0A080;font-size:34px;text-decoration:line-through}
+
+.op-cell{width:52px;height:58px;display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:900;color:var(--borrow)}
+
+.ans-cell{width:64px;height:64px;display:flex;align-items:center;justify-content:center;border-radius:12px;border:2px solid var(--border);background:var(--bg)}
+.ans-cell.active-col{border-color:var(--accent);background:var(--accent-light)}
+.ans-cell.done{border-color:var(--success);background:var(--success-bg)}
+.ans-cell.err{border-color:var(--error);background:var(--error-bg);animation:shake .35s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+
+.ans-input{font-size:40px;font-weight:900;width:52px;height:52px;border:none;background:transparent;text-align:center;color:var(--ink);outline:none;-moz-appearance:textfield}
 .ans-input::-webkit-outer-spin-button,.ans-input::-webkit-inner-spin-button{-webkit-appearance:none}
-.ans-input:disabled{color:#16A34A}
-.blank-dig{font-family:'Fredoka One',cursive;font-size:38px;color:#DDD}
-.instr{background:linear-gradient(135deg,#FFF8E8,#FFE8C0);border-radius:16px;padding:14px 16px;border:2.5px solid #F5DFA0;margin-bottom:12px;font-size:15px;font-weight:700;color:var(--burg);line-height:1.7}
-.instr strong{color:var(--wood)}.bw{color:var(--red);font-weight:900}
-.fb{min-height:26px;font-family:'Fredoka One',cursive;font-size:17px;text-align:center;margin-bottom:10px}
-.fb.g{color:#16A34A}.fb.b{color:var(--red)}
-.done-box{background:#D4F5D4;border-radius:16px;padding:14px;text-align:center;font-family:'Fredoka One',cursive;font-size:22px;color:#065F46;margin-bottom:12px;display:none}
+.ans-input:disabled{color:var(--success)}
+.blank-dig{font-size:34px;font-weight:900;color:var(--border)}
+
+.fb{min-height:24px;font-size:15px;font-weight:800;text-align:center;margin-bottom:12px}
+.fb.ok{color:var(--success)}.fb.no{color:var(--error)}
+
+.done-banner{background:var(--success-bg);border:1.5px solid #86EFAC;border-radius:12px;padding:14px;text-align:center;font-size:20px;font-weight:900;color:var(--success);margin-bottom:12px;display:none}
+
 .btn-row{display:flex;gap:10px;flex-wrap:wrap}
-.go-btn{background:linear-gradient(135deg,var(--gold),var(--wood));color:#fff;border:none;border-radius:14px;padding:12px 26px;font-family:'Fredoka One',cursive;font-size:16px;cursor:pointer;box-shadow:0 4px 0 rgba(0,0,0,.2);transition:all .18s}
-.go-btn:hover{transform:scale(1.06)}
-.new-btn{background:#fff;border:2.5px solid #F5DFA0;color:var(--wood);font-family:'Fredoka One',cursive;font-size:14px;padding:10px 22px;border-radius:14px;cursor:pointer}
-</style></head><body>
-<div class="chest-header"><div class="gold-shine"></div><div class="ch-title">💰 Subtraction of Greater Numbers</div><div class="ch-chip">Chapter 7</div></div>
-<div class="page"><div class="tcard">
-<div class="tc-title">🔢 Type the answer — one column at a time!</div>
-<div class="hint">The gold column is where you work. Read the instruction — sometimes we need to <strong>borrow</strong> from the Tens column! Type the digit, press Check, then move left.</div>
-<div class="col-wrapper"><div class="sum-table" id="sumTable"></div></div>
-<div class="instr" id="instr">Press "New problem" to start!</div>
-<div class="fb" id="fb"></div>
-<div class="done-box" id="doneBox"></div>
-<div class="btn-row">
-  <button class="go-btn" id="goBtn" onclick="check()" style="display:none">Check ✓</button>
-  <button class="new-btn" onclick="newProblem()">New problem ↻</button>
+.go-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 24px;font-size:15px;font-weight:800;cursor:pointer;transition:all .18s}
+.go-btn:hover{background:var(--accent-dark);transform:translateY(-1px)}
+.new-btn{background:var(--surface);border:2px solid var(--border);color:var(--ink2);font-size:14px;font-weight:800;padding:11px 22px;border-radius:12px;cursor:pointer;transition:all .15s}
+.new-btn:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ── PRACTICE ── */
+.score-bar{display:flex;align-items:center;gap:10px;background:var(--bg);border-radius:10px;padding:10px 14px;border:1.5px solid var(--border)}
+.score-label{font-size:12px;font-weight:800;color:var(--ink2);flex:1}
+.score-nums{font-size:14px;font-weight:900;color:var(--accent)}
+.prac-problem{font-size:32px;font-weight:900;color:var(--ink);text-align:center;margin-bottom:16px;letter-spacing:2px}
+.prac-inp{font-size:32px;font-weight:900;width:120px;height:60px;border-radius:12px;border:2px solid var(--border);text-align:center;color:var(--accent-dark);outline:none;transition:border-color .15s;background:var(--accent-light);-moz-appearance:textfield;display:block;margin:0 auto 8px}
+.prac-inp::-webkit-outer-spin-button,.prac-inp::-webkit-inner-spin-button{-webkit-appearance:none}
+.prac-inp:focus{border-color:var(--accent)}
+.prac-check{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 26px;font-size:15px;font-weight:800;cursor:pointer;transition:all .18s;display:block;margin:0 auto}
+.prac-check:hover{background:var(--accent-dark);transform:translateY(-1px)}
+.prac-fb{font-size:15px;font-weight:800;min-height:22px;margin-top:10px;text-align:center}
+.next-btn{margin-top:14px;background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 26px;font-size:15px;font-weight:800;cursor:pointer;transition:all .18s;display:block;margin:14px auto 0}
+.next-btn:hover{background:var(--accent-dark);transform:translateY(-1px)}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-row">
+    <span class="chapter-label">Chapter 7</span>
+    <span class="header-title">Subtraction of Greater Numbers</span>
+  </div>
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('learn')">Learn</div>
+    <div class="tab" onclick="switchTab('practice')">Practice</div>
+  </div>
 </div>
-</div></div>
+
+<div class="page">
+
+  <!-- LEARN -->
+  <div class="panel active" id="panel-learn">
+    <div class="card">
+      <div class="card-accent amber"></div>
+      <div class="card-title">Subtract one column at a time</div>
+      <div class="card-sub">The highlighted column is where you work. Sometimes you need to borrow from the tens. Read the instruction and type the digit.</div>
+
+      <div class="col-wrap"><div class="sum-table" id="sumTable"></div></div>
+      <div class="instr-box" id="instrBox">Press "New problem" to begin.</div>
+      <div class="fb" id="fb"></div>
+      <div class="done-banner" id="doneBanner"></div>
+      <div class="btn-row">
+        <button class="go-btn" id="goBtn" onclick="check()" style="display:none">Check ✓</button>
+        <button class="new-btn" onclick="newProblem()">New problem ↻</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRACTICE -->
+  <div class="panel" id="panel-practice">
+    <div class="score-bar">
+      <span class="score-label">Questions answered</span>
+      <span class="score-nums" id="scoreDisplay">0 correct / 0 total</span>
+    </div>
+    <div class="card">
+      <div class="card-accent green"></div>
+      <div class="card-title">Work it out and type the answer</div>
+      <div class="card-sub">Use column subtraction. Start from the ones — borrow from the tens if the top digit is too small!</div>
+      <div class="prac-problem" id="pracProblem"></div>
+      <input type="number" class="prac-inp" id="pracInput" min="0" max="99" placeholder="?">
+      <button class="prac-check" onclick="checkPrac()">Check ✓</button>
+      <div class="prac-fb" id="pracFb"></div>
+      <button class="next-btn" onclick="newPrac()">Next question →</button>
+    </div>
+  </div>
+
+</div>
+
 <script>
-let N1,N2,tensN1,onesN1,tensN2,onesN2,borrowed,tensEff,onesEff,ansT,ansO,step;
-const SOLVE_ORDER=[1,0];
+function switchTab(name){
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',['learn','practice'][i]===name));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('panel-'+name).classList.add('active');
+}
+
+/* ── LEARN ── */
+let N1,N2,tensN1,onesN1,tensN2,onesN2,borrowed,onesEff,tensEff,ansT,ansO,lStep;
+const SOLVE_ORDER=[1,0]; // ones first, then tens
+
 function rand(a,b){return Math.floor(Math.random()*(b-a+1))+a;}
+
 function generate(){N2=rand(11,79);N1=rand(N2+1,Math.min(N2+40,99));}
-function init(){tensN1=Math.floor(N1/10);onesN1=N1%10;tensN2=Math.floor(N2/10);onesN2=N2%10;borrowed=onesN1<onesN2;onesEff=borrowed?onesN1+10:onesN1;tensEff=borrowed?tensN1-1:tensN1;ansO=onesEff-onesN2;ansT=tensEff-tensN2;step=0;}
-function solvedSet(){return new Set(SOLVE_ORDER.slice(0,step));}
+
+function init(){
+  tensN1=Math.floor(N1/10);onesN1=N1%10;
+  tensN2=Math.floor(N2/10);onesN2=N2%10;
+  borrowed=onesN1<onesN2;
+  onesEff=borrowed?onesN1+10:onesN1;
+  tensEff=borrowed?tensN1-1:tensN1;
+  ansO=onesEff-onesN2;ansT=tensEff-tensN2;
+  lStep=0;
+}
+
 function draw(){
-  const solved=solvedSet();const cur=SOLVE_ORDER[step];const tbl=document.getElementById('sumTable');let html='';
-  html+=`<div></div><div class="hdr${cur===0?' on':''}">T</div><div class="hdr${cur===1?' on':''}">O</div>`;
-  html+=`<div></div><div class="bw-wrap"></div>`;
-  if(borrowed&&(cur===1||solved.has(1)))html+=`<div class="bw-wrap"><span class="bw-new">${onesEff}</span></div>`;else html+=`<div class="bw-wrap"></div>`;
-  const tensCrossed=borrowed&&solved.has(1);
-  html+=`<div></div><div class="cell${cur===0?' on':''}${tensCrossed?' crossed':''}">${tensN1}</div>`;
-  const onesCrossed=borrowed&&(cur===1||solved.has(1));
-  html+=`<div class="cell${cur===1?' on':''}${onesCrossed?' crossed':''}">${onesN1}</div>`;
-  html+=`<div class="op">−</div><div class="cell${cur===0?' on':''}">${tensN2}</div><div class="cell${cur===1?' on':''}">${onesN2}</div>`;
-  html+=`<div></div><div style="grid-column:2/4;border-top:3px solid var(--burg);margin:4px 0"></div><div style="display:none"></div>`;
+  const solved=new Set(SOLVE_ORDER.slice(0,lStep));
+  const cur=SOLVE_ORDER[lStep];
+  const tbl=document.getElementById('sumTable');
+  const isMob=window.innerWidth<400;const cw=isMob?50:64;const ow=isMob?38:52;tbl.style.gridTemplateColumns=`${ow}px ${cw}px ${cw}px`;
+
+  let html='';
+
+  // header
+  html+=`<div></div><div class="hdr${cur===0?' active-col':''}">T</div><div class="hdr${cur===1?' active-col':''}">O</div>`;
+
+  // borrow row
   html+=`<div></div>`;
-  if(solved.has(0))html+=`<div class="ans-cell done"><input class="ans-input" value="${ansT}" disabled></div>`;else if(cur===0)html+=`<div class="ans-cell on" id="curCell"><input class="ans-input" id="curIn" type="number" min="0" max="9" placeholder="?" autocomplete="off"></div>`;else html+=`<div class="ans-cell"><span class="blank-dig">_</span></div>`;
-  if(solved.has(1))html+=`<div class="ans-cell done"><input class="ans-input" value="${ansO}" disabled></div>`;else if(cur===1)html+=`<div class="ans-cell on" id="curCell"><input class="ans-input" id="curIn" type="number" min="0" max="9" placeholder="?" autocomplete="off"></div>`;else html+=`<div class="ans-cell"><span class="blank-dig">_</span></div>`;
+  // tens borrow display
+  const tCrossed=borrowed&&solved.has(1);
+  html+=`<div class="borrow-cell">${tCrossed?`<span class="borrow-old">${tensN1}</span><span class="borrow-new">${tensEff}</span>`:''}</div>`;
+  // ones borrow display
+  const oBorrow=borrowed&&(cur===1||solved.has(1));
+  html+=`<div class="borrow-cell">${oBorrow?`<span class="borrow-new">${onesEff}</span>`:''}</div>`;
+
+  // N1 row
+  html+=`<div></div>`;
+  html+=`<div class="num-cell${cur===0?' active-col':''}${tCrossed?' crossed':''}">${tensN1}</div>`;
+  html+=`<div class="num-cell${cur===1?' active-col':''}${oBorrow?' crossed':''}">${onesN1}</div>`;
+
+  // N2 row
+  html+=`<div class="op-cell">−</div>`;
+  html+=`<div class="num-cell${cur===0?' active-col':''}">${tensN2}</div>`;
+  html+=`<div class="num-cell${cur===1?' active-col':''}">${onesN2}</div>`;
+
+  // divider
+  html+=`<div></div><div style="grid-column:2/4;height:3px;background:var(--ink);border-radius:2px;margin:2px 0"></div><div style="display:none"></div>`;
+
+  // answer row
+  html+=`<div></div>`;
+  [0,1].forEach(i=>{
+    if(solved.has(i)){
+      const v=i===0?ansT:ansO;
+      html+=`<div class="ans-cell done"><input class="ans-input" value="${v}" disabled></div>`;
+    } else if(i===cur){
+      html+=`<div class="ans-cell active-col" id="curCell"><input class="ans-input" id="curIn" type="number" min="0" max="9" placeholder="?" autocomplete="off"></div>`;
+    } else {
+      html+=`<div class="ans-cell"><span class="blank-dig">_</span></div>`;
+    }
+  });
+
   tbl.innerHTML=html;
-  const inp=document.getElementById('curIn');if(inp){inp.oninput=()=>{if(inp.value.length>1)inp.value=inp.value.slice(-1);};inp.onkeydown=e=>{if(e.key==='Enter')check();};inp.focus();}
+  const inp=document.getElementById('curIn');
+  if(inp){
+    inp.oninput=()=>{if(inp.value.length>1)inp.value=inp.value.slice(-1);};
+    inp.onkeydown=e=>{if(e.key==='Enter')check();};
+    inp.focus();
+  }
 }
+
 function buildInstr(){
-  const cur=SOLVE_ORDER[step];let html;
-  if(cur===1){if(borrowed){html=`<strong>O column</strong> (gold): The top digit (${onesN1}) is smaller, so we <span class="bw">borrow 10</span> from Tens.<br>The top digit becomes <strong>${onesEff}</strong>. ${onesEff} − ${onesN2} = <strong>${ansO}</strong>. Write <strong>${ansO}</strong>.`;}else{html=`<strong>O column</strong> (gold): ${onesN1} − ${onesN2} = <strong>${ansO}</strong>. Write <strong>${ansO}</strong>.`;}}
-  else{if(borrowed){html=`<strong>T column</strong> (gold): We borrowed 1, so the top digit is now ${tensEff}.<br>${tensEff} − ${tensN2} = <strong>${ansT}</strong>. Write <strong>${ansT}</strong>.`;}else{html=`<strong>T column</strong> (gold): ${tensN1} − ${tensN2} = <strong>${ansT}</strong>. Write <strong>${ansT}</strong>.`;}}
-  document.getElementById('instr').innerHTML=html;
+  const cur=SOLVE_ORDER[lStep];
+  let html;
+  if(cur===1){
+    if(borrowed){
+      html=`<strong>O column</strong>: ${onesN1} is smaller than ${onesN2}, so we <span class="borrow-note">borrow 10 from the Tens</span>. The top digit becomes <strong>${onesEff}</strong>. ${onesEff} − ${onesN2} = <strong>${ansO}</strong>. Write <strong>${ansO}</strong>.`;
+    } else {
+      html=`<strong>O column</strong>: ${onesN1} − ${onesN2} = <strong>${ansO}</strong>. Write <strong>${ansO}</strong>.`;
+    }
+  } else {
+    if(borrowed){
+      html=`<strong>T column</strong>: We borrowed 1, so the top tens digit is now <strong>${tensEff}</strong>. ${tensEff} − ${tensN2} = <strong>${ansT}</strong>. Write <strong>${ansT}</strong>.`;
+    } else {
+      html=`<strong>T column</strong>: ${tensN1} − ${tensN2} = <strong>${ansT}</strong>. Write <strong>${ansT}</strong>.`;
+    }
+  }
+  document.getElementById('instrBox').innerHTML=html;
 }
+
 function check(){
-  const cur=SOLVE_ORDER[step];const correct=cur===1?ansO:ansT;const inp=document.getElementById('curIn');if(!inp)return;const v=parseInt(inp.value);const fb=document.getElementById('fb');
-  if(isNaN(v)){fb.textContent='Type a digit 0–9!';fb.className='fb b';return;}
-  if(v===correct){fb.textContent='✓ Correct! ⭐';fb.className='fb g';document.getElementById('curCell').classList.replace('on','done');step++;setTimeout(()=>{fb.textContent='';if(step>=SOLVE_ORDER.length)done();else{draw();buildInstr();}},600);}
-  else{fb.textContent='Not right — re-read the instruction!';fb.className='fb b';const cell=document.getElementById('curCell');cell.classList.add('err');inp.value='';inp.focus();setTimeout(()=>cell.classList.remove('err'),500);}
+  const cur=SOLVE_ORDER[lStep];const correct=cur===1?ansO:ansT;
+  const inp=document.getElementById('curIn');if(!inp)return;
+  const v=parseInt(inp.value);const fb=document.getElementById('fb');
+  if(isNaN(v)){fb.textContent='Type a digit (0–9).';fb.className='fb no';return;}
+  if(v===correct){
+    fb.textContent='Correct!';fb.className='fb ok';
+    document.getElementById('curCell').classList.replace('active-col','done');
+    lStep++;
+    setTimeout(()=>{fb.textContent='';if(lStep>=SOLVE_ORDER.length)done();else{draw();buildInstr();}},500);
+  } else {
+    fb.textContent='Not right — re-read the instruction and try again.';fb.className='fb no';
+    const cell=document.getElementById('curCell');cell.classList.add('err');
+    inp.value='';inp.focus();
+    setTimeout(()=>cell.classList.remove('err'),400);
+  }
 }
-function done(){draw();document.getElementById('doneBox').style.display='block';document.getElementById('doneBox').textContent=`🎉 ${N1} − ${N2} = ${N1-N2}! Brilliant! 💰`;document.getElementById('instr').style.opacity='.35';document.getElementById('goBtn').style.display='none';document.getElementById('fb').textContent='';}
-function newProblem(){generate();init();document.getElementById('doneBox').style.display='none';document.getElementById('instr').style.opacity='1';document.getElementById('goBtn').style.display='inline-block';document.getElementById('fb').textContent='';document.getElementById('fb').className='fb';draw();buildInstr();}
+
+function done(){
+  draw();
+  const banner=document.getElementById('doneBanner');
+  banner.style.display='block';banner.textContent=N1+' − '+N2+' = '+(N1-N2)+'. Well done!';
+  document.getElementById('instrBox').style.opacity='.4';
+  document.getElementById('goBtn').style.display='none';
+  document.getElementById('fb').textContent='';
+}
+
+function newProblem(){
+  generate();init();
+  document.getElementById('doneBanner').style.display='none';
+  document.getElementById('instrBox').style.opacity='1';
+  document.getElementById('goBtn').style.display='inline-block';
+  document.getElementById('fb').textContent='';document.getElementById('fb').className='fb';
+  draw();buildInstr();
+}
 newProblem();
-</script></body></html>
+
+/* ── PRACTICE ── */
+let correct=0,total=0,pracAns=0;
+function updateScore(){document.getElementById('scoreDisplay').textContent=correct+' correct / '+total+' total';}
+
+function newPrac(){
+  const b=rand(11,79);const a=rand(b+1,Math.min(b+40,99));pracAns=a-b;
+  document.getElementById('pracProblem').textContent=a+' − '+b+' = ?';
+  document.getElementById('pracInput').value='';
+  document.getElementById('pracFb').textContent='';
+}
+function checkPrac(){
+  const v=parseInt(document.getElementById('pracInput').value);
+  const fb=document.getElementById('pracFb');
+  if(isNaN(v)){fb.textContent='Type your answer.';fb.style.color='var(--ink2)';return;}
+  total++;
+  if(v===pracAns){correct++;fb.textContent='Correct! The answer is '+pracAns+'.';fb.style.color='var(--success)';}
+  else{fb.textContent='Not quite. The answer is '+pracAns+'. Use column subtraction — borrow if needed!';fb.style.color='var(--error)';}
+  updateScore();
+}
+newPrac();
+</script>
+</body>
+</html>
