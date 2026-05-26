@@ -4,306 +4,128 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chapter 7 · Subtraction of Greater Numbers</title>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Grandstander:wght@500;600;700;800;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --accent:#B45309;--accent-light:#FFFBEB;--accent-mid:#FDE68A;
-  --accent-dark:#92400E;--bg:#F7F8FA;--surface:#FFFFFF;
-  --ink:#1C2B2B;--ink2:#4B6060;--border:#E4EAE9;
-  --success:#16A34A;--success-bg:#DCFCE7;
-  --error:#DC2626;--error-bg:#FEE2E2;
-  --borrow:#DC2626;
-}
-html,body{width:100%;min-height:100vh;font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);overflow-x:hidden}
-
-.header{width:100%;background:var(--surface);border-bottom:2px solid var(--border);padding:16px 20px 0;display:flex;flex-direction:column;align-items:center;position:sticky;top:0;z-index:100}
-.header-row{width:100%;max-width:640px;display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-.chapter-label{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);background:var(--accent-light);padding:4px 12px;border-radius:20px}
-.header-title{font-size:20px;font-weight:900;color:var(--ink)}
-.tabs{display:flex;gap:4px;width:100%;max-width:640px}
-.tab{flex:1;padding:10px 0;text-align:center;font-size:14px;font-weight:800;cursor:pointer;border-bottom:3px solid transparent;color:var(--ink2);transition:all .2s;border-radius:8px 8px 0 0}
-.tab:hover{color:var(--accent);background:var(--accent-light)}
-.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
-
-.page{width:100%;max-width:640px;margin:0 auto;padding:24px 16px 40px;display:flex;flex-direction:column;gap:20px}
-.panel{display:none}.panel.active{display:flex;flex-direction:column;gap:20px}
-
-.card{background:var(--surface);border-radius:16px;padding:22px;border:1.5px solid var(--border);box-shadow:0 2px 8px rgba(0,0,0,.05);position:relative}
-.card-accent{position:absolute;top:0;left:0;bottom:0;width:4px;border-radius:16px 0 0 16px}
-.card-accent.amber{background:var(--accent)}
-.card-accent.green{background:#16A34A}
-.card-title{font-size:17px;font-weight:900;color:var(--ink);margin-bottom:4px;padding-left:12px}
-.card-sub{font-size:13px;font-weight:700;color:var(--ink2);margin-bottom:18px;padding-left:12px;line-height:1.5}
-
-/* ── COLUMN TABLE ── */
-.instr-box{background:var(--accent-light);border:1.5px solid var(--accent-mid);border-radius:12px;padding:14px 16px;margin-bottom:16px;font-size:14px;font-weight:700;color:var(--ink);line-height:1.8}
-.instr-box strong{color:var(--accent-dark)}
-.borrow-note{color:var(--borrow);font-weight:900}
-
-.col-wrap{display:flex;justify-content:center;margin-bottom:20px;overflow-x:auto;padding-bottom:4px}
-@media(max-width:400px){.num-cell{width:50px;height:48px;font-size:34px}.hdr{width:50px;height:26px}.borrow-cell{width:50px}.ans-cell{width:50px;height:52px}.ans-input{width:40px;height:40px;font-size:34px}.op-cell{width:38px;font-size:26px}.borrow-new{font-size:16px}.borrow-old{font-size:11px}}
-.sum-table{display:grid;row-gap:0;align-items:center}
-
-.hdr{height:28px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:var(--ink2);border-radius:6px}
-.hdr.active-col{color:var(--accent-dark);background:var(--accent-light)}
-
-.borrow-cell{width:64px;height:30px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end}
-.borrow-old{font-size:13px;font-weight:900;color:#9CA3AF;text-decoration:line-through;line-height:1}
-.borrow-new{font-size:19px;font-weight:900;color:var(--borrow);line-height:1}
-
-.num-cell{width:64px;height:58px;display:flex;align-items:center;justify-content:center;font-size:40px;font-weight:900;color:var(--ink);border-radius:10px}
-.num-cell.active-col{background:var(--accent-light)}
-.num-cell.crossed{color:#C0A080;font-size:34px;text-decoration:line-through}
-
-.op-cell{width:52px;height:58px;display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:900;color:var(--borrow)}
-
-.ans-cell{width:64px;height:64px;display:flex;align-items:center;justify-content:center;border-radius:12px;border:2px solid var(--border);background:var(--bg)}
-.ans-cell.active-col{border-color:var(--accent);background:var(--accent-light)}
-.ans-cell.done{border-color:var(--success);background:var(--success-bg)}
-.ans-cell.err{border-color:var(--error);background:var(--error-bg);animation:shake .35s}
-@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
-
-.ans-input{font-size:40px;font-weight:900;width:52px;height:52px;border:none;background:transparent;text-align:center;color:var(--ink);outline:none;-moz-appearance:textfield}
-.ans-input::-webkit-outer-spin-button,.ans-input::-webkit-inner-spin-button{-webkit-appearance:none}
-.ans-input:disabled{color:var(--success)}
-.blank-dig{font-size:34px;font-weight:900;color:var(--border)}
-
-.fb{min-height:24px;font-size:15px;font-weight:800;text-align:center;margin-bottom:12px}
-.fb.ok{color:var(--success)}.fb.no{color:var(--error)}
-
-.done-banner{background:var(--success-bg);border:1.5px solid #86EFAC;border-radius:12px;padding:14px;text-align:center;font-size:20px;font-weight:900;color:var(--success);margin-bottom:12px;display:none}
-
-.btn-row{display:flex;gap:10px;flex-wrap:wrap}
-.go-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 24px;font-size:15px;font-weight:800;cursor:pointer;transition:all .18s}
-.go-btn:hover{background:var(--accent-dark);transform:translateY(-1px)}
-.new-btn{background:var(--surface);border:2px solid var(--border);color:var(--ink2);font-size:14px;font-weight:800;padding:11px 22px;border-radius:12px;cursor:pointer;transition:all .15s}
-.new-btn:hover{border-color:var(--accent);color:var(--accent)}
-
-/* ── PRACTICE ── */
-.score-bar{display:flex;align-items:center;gap:10px;background:var(--bg);border-radius:10px;padding:10px 14px;border:1.5px solid var(--border)}
-.score-label{font-size:12px;font-weight:800;color:var(--ink2);flex:1}
-.score-nums{font-size:14px;font-weight:900;color:var(--accent)}
-.prac-problem{font-size:32px;font-weight:900;color:var(--ink);text-align:center;margin-bottom:16px;letter-spacing:2px}
-.prac-inp{font-size:32px;font-weight:900;width:120px;height:60px;border-radius:12px;border:2px solid var(--border);text-align:center;color:var(--accent-dark);outline:none;transition:border-color .15s;background:var(--accent-light);-moz-appearance:textfield;display:block;margin:0 auto 8px}
-.prac-inp::-webkit-outer-spin-button,.prac-inp::-webkit-inner-spin-button{-webkit-appearance:none}
-.prac-inp:focus{border-color:var(--accent)}
-.prac-check{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 26px;font-size:15px;font-weight:800;cursor:pointer;transition:all .18s;display:block;margin:0 auto}
-.prac-check:hover{background:var(--accent-dark);transform:translateY(-1px)}
-.prac-fb{font-size:15px;font-weight:800;min-height:22px;margin-top:10px;text-align:center}
-.next-btn{margin-top:14px;background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 26px;font-size:15px;font-weight:800;cursor:pointer;transition:all .18s;display:block;margin:14px auto 0}
-.next-btn:hover{background:var(--accent-dark);transform:translateY(-1px)}
+:root{--ac:#B45309;--bg:#FDF6EE;--card:#fff;--ink:#1A2E2E;--ink2:#5F7A7A;--ok:#16A34A;--no:#DC2626;--r:20px}
+html,body{width:100%;min-height:100vh;font-family:'Poppins',sans-serif;background:var(--bg);color:var(--ink);overflow-x:hidden}
+.hdr{width:100%;position:sticky;top:0;z-index:100;background:var(--ac);box-shadow:0 4px 24px rgba(0,0,0,.15)}
+.hdr-in{max-width:640px;margin:0 auto;padding:14px 20px 0;text-align:center}
+.ch-n{font-family:'Grandstander',cursive;font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.65)}
+.ch-t{font-family:'Grandstander',cursive;font-size:clamp(18px,5vw,26px);font-weight:900;color:#fff;line-height:1.2;margin:2px 0 10px;text-shadow:0 2px 8px rgba(0,0,0,.1)}
+.tabs{display:flex;gap:4px;max-width:280px;margin:0 auto;background:rgba(0,0,0,.1);border-radius:14px 14px 0 0;padding:4px 4px 0}
+.tab{flex:1;padding:9px 0;text-align:center;font-family:'Grandstander',cursive;font-size:14px;font-weight:800;cursor:pointer;border-radius:12px 12px 0 0;color:rgba(255,255,255,.6);transition:.2s;user-select:none}
+.tab.on{background:var(--bg);color:var(--ac)}
+.tab:not(.on):hover{color:#fff;background:rgba(255,255,255,.08)}
+.page{max-width:620px;margin:0 auto;padding:14px 14px 60px}
+.pnl{display:none;flex-direction:column;gap:16px}.pnl.on{display:flex}
+.card{background:var(--card);border-radius:var(--r);padding:20px 18px;box-shadow:0 3px 16px rgba(0,0,0,.06);position:relative;overflow:hidden}
+.cb{position:absolute;top:0;left:0;bottom:0;width:5px;border-radius:var(--r) 0 0 var(--r);background:var(--ac)}
+.ct{font-family:'Grandstander',cursive;font-size:15px;font-weight:800;padding-left:14px;margin-bottom:3px;line-height:1.3}
+.cs{font-size:12px;color:var(--ink2);padding-left:14px;margin-bottom:14px;line-height:1.6}
+/* stepper */
+.cr{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.cg{display:flex;align-items:center;gap:8px;background:rgba(0,0,0,.03);border-radius:12px;padding:8px 12px;border:1.5px solid rgba(0,0,0,.06)}
+.cl{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;min-width:48px}
+.sb{width:34px;height:34px;border-radius:50%;border:none;font-size:18px;font-weight:900;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.12s;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+.sb:active{transform:scale(.88)}
+.sv{font-family:'Grandstander',cursive;font-size:28px;font-weight:900;min-width:28px;text-align:center}
+/* blocks */
+.bx{background:rgba(0,0,0,.02);border-radius:14px;border:1.5px solid rgba(0,0,0,.06);padding:12px;min-height:60px;display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;margin-bottom:14px}
+.flat{display:grid;grid-template-columns:repeat(10,8px);gap:1px}.flat-c{width:8px;height:8px;border-radius:1px;opacity:.8}
+.rod{display:flex;flex-direction:column;gap:1px}.rod-c{width:10px;height:10px;border-radius:1px;opacity:.8}
+.units{display:flex;flex-wrap:wrap;gap:2px;max-width:58px;align-self:flex-end}.unit-c{width:10px;height:10px;border-radius:2px;opacity:.8}
+.sep{width:1px;background:#D1D5DB;align-self:stretch;margin:0 3px}
+/* options */
+.opts{display:flex;gap:8px;flex-wrap:wrap}
+.opt{font-family:'Grandstander',cursive;font-size:22px;font-weight:800;min-width:72px;height:54px;border-radius:16px;border:2.5px solid rgba(0,0,0,.08);background:#fff;cursor:pointer;color:var(--ink);display:flex;align-items:center;justify-content:center;transition:.15s;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.opt:hover{border-color:var(--ac);transform:translateY(-2px)}
+.opt.ok{background:#DCFCE7;border-color:var(--ok);color:#15803D;animation:pop .3s}
+.opt.no{background:#FEE2E2;border-color:var(--no);color:var(--no);animation:shk .35s}
+@keyframes pop{0%{transform:scale(1)}50%{transform:scale(1.08)}100%{transform:scale(1)}}
+@keyframes shk{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.fb{font-family:'Grandstander',cursive;font-size:14px;font-weight:700;min-height:20px;margin-top:10px;text-align:center}
+.nbtn{font-family:'Grandstander',cursive;font-size:14px;font-weight:800;padding:10px 24px;border-radius:14px;border:none;background:var(--ac);color:#fff;cursor:pointer;margin-top:12px;box-shadow:0 3px 10px rgba(0,0,0,.12);transition:.15s}
+.nbtn:hover{transform:translateY(-1px);opacity:.9}
+.btn{font-family:'Grandstander',cursive;font-size:14px;font-weight:800;padding:10px 20px;border-radius:14px;border:none;cursor:pointer;transition:.15s;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.btn:hover{transform:translateY(-1px)}
+.btn-p{background:var(--ac);color:#fff}
+.btn-g{background:#fff;color:var(--ink2);border:1.5px solid rgba(0,0,0,.1)}
+.btn-g:hover{border-color:var(--ac);color:var(--ac)}
+.chal{background:rgba(0,0,0,.02);border-radius:16px;padding:14px;border:1.5px dashed rgba(0,0,0,.1);margin-top:10px}
+.chal-q{font-family:'Grandstander',cursive;font-size:14px;font-weight:800;margin-bottom:10px}
+.chal-q b{color:var(--ac);font-size:22px}
+canvas{display:block;border-radius:10px}
+/* drag & tap shared */
+.tappable{cursor:pointer;user-select:none;transition:transform .15s}
+.tappable:hover{transform:scale(1.08)}
+.tappable:active{transform:scale(.92)}
+/* misc */
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.pill{display:inline-block;font-family:'Grandstander',cursive;font-size:14px;font-weight:800;padding:6px 18px;border-radius:30px}
+.big{font-family:'Grandstander',cursive;font-weight:900;line-height:1;text-align:center}
 </style>
 </head>
 <body>
-
-<div class="header">
-  <div class="header-row">
-    <span class="chapter-label">Chapter 7</span>
-    <span class="header-title">Subtraction of Greater Numbers</span>
-  </div>
+<div class="hdr"><div class="hdr-in">
+  <div class="ch-n">Chapter 7</div>
+  <div class="ch-t">Subtraction of Greater Numbers</div>
   <div class="tabs">
-    <div class="tab active" onclick="switchTab('learn')">Learn</div>
-    <div class="tab" onclick="switchTab('practice')">Practice</div>
+    <div class="tab on" onclick="sw('learn')">Learn</div>
+    <div class="tab" onclick="sw('practice')">Practice</div>
   </div>
-</div>
-
+</div></div>
 <div class="page">
 
-  <!-- LEARN -->
-  <div class="panel active" id="panel-learn">
-    <div class="card">
-      <div class="card-accent amber"></div>
-      <div class="card-title">Subtract one column at a time</div>
-      <div class="card-sub">The highlighted column is where you work. Sometimes you need to borrow from the tens. Read the instruction and type the digit.</div>
-
-      <div class="col-wrap"><div class="sum-table" id="sumTable"></div></div>
-      <div class="instr-box" id="instrBox">Press "New problem" to begin.</div>
-      <div class="fb" id="fb"></div>
-      <div class="done-banner" id="doneBanner"></div>
-      <div class="btn-row">
-        <button class="go-btn" id="goBtn" onclick="check()" style="display:none">Check ✓</button>
-        <button class="new-btn" onclick="newProblem()">New problem ↻</button>
-      </div>
-    </div>
+<div class="pnl on" id="p-learn">
+  <div class="card"><div class="cb"></div>
+    <div class="ct">Subtract one column at a time</div>
+    <div class="cs">Start from the right. Sometimes you need to borrow from the tens column!</div>
+    <div style="display:flex;justify-content:center;margin-bottom:16px"><div id="sT7" style="display:grid;grid-template-columns:52px 60px 60px;row-gap:0;align-items:center"></div></div>
+    <div style="background:rgba(0,0,0,.02);border-radius:14px;padding:14px 16px;border:1.5px solid rgba(0,0,0,.06);margin-bottom:12px;font-size:13px;font-weight:600;color:var(--ink);line-height:1.8" id="in7">Press New problem to start.</div>
+    <div class="fb" id="f7"></div>
+    <div id="dn7" style="display:none;background:#DCFCE7;border-radius:14px;padding:14px;text-align:center;font-family:Grandstander,cursive;font-size:20px;font-weight:900;color:var(--ok);margin-bottom:10px"></div>
+    <div class="row"><button class="btn btn-p" id="go7" onclick="ck7()" style="display:none">Check ✓</button><button class="btn btn-g" onclick="np7()">New problem ↻</button></div>
   </div>
-
-  <!-- PRACTICE -->
-  <div class="panel" id="panel-practice">
-    <div class="score-bar">
-      <span class="score-label">Questions answered</span>
-      <span class="score-nums" id="scoreDisplay">0 correct / 0 total</span>
-    </div>
-    <div class="card">
-      <div class="card-accent green"></div>
-      <div class="card-title">Work it out and type the answer</div>
-      <div class="card-sub">Use column subtraction. Start from the ones — borrow from the tens if the top digit is too small!</div>
-      <div class="prac-problem" id="pracProblem"></div>
-      <input type="number" class="prac-inp" id="pracInput" min="0" max="99" placeholder="?">
-      <button class="prac-check" onclick="checkPrac()">Check ✓</button>
-      <div class="prac-fb" id="pracFb"></div>
-      <button class="next-btn" onclick="newPrac()">Next question →</button>
-    </div>
-  </div>
-
 </div>
-
+<div class="pnl" id="p-practice">
+  <div class="card"><div class="cb"></div>
+    <div class="ct">Solve it yourself</div>
+    <div class="cs">Subtract. Borrow if the top digit is smaller!</div>
+    <div class="big" style="font-size:30px;margin-bottom:14px" id="p7Q"></div>
+    <div class="opts" id="p7O"></div><div class="fb" id="p7F"></div>
+    <button class="nbtn" onclick="np7p()">Next →</button>
+  </div>
+</div>
+</div>
 <script>
-function switchTab(name){
-  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',['learn','practice'][i]===name));
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-  document.getElementById('panel-'+name).classList.add('active');
-}
+function sw(n){document.querySelectorAll('.tab').forEach(function(t){t.classList.toggle('on',t.textContent.toLowerCase()===n)});document.querySelectorAll('.pnl').forEach(function(p){var a=p.id==='p-'+n;p.classList.toggle('on',a);p.style.display=a?'flex':'none'})}
+document.getElementById('p-practice').style.display='none';
+function pool4(ans,lo,hi){var s=new Set([ans]);var i=0;while(s.size<4&&i<50){i++;var w=ans+Math.round(Math.random()*8-4);if(w>=lo&&w<=hi&&w!==ans)s.add(w)}return[...s].sort(function(){return Math.random()-.5})}
+function mkOpts(cid,items,correct,fid){var c=document.getElementById(cid);c.innerHTML='';items.forEach(function(n){var b=document.createElement('button');b.className='opt';b.textContent=n;b.onclick=function(){c.querySelectorAll('.opt').forEach(function(x){x.onclick=null});var fb=document.getElementById(fid);if(String(n)===String(correct)){b.classList.add('ok');fb.textContent='🎉 Correct!';fb.style.color='var(--ok)'}else{b.classList.add('no');fb.textContent='The answer is '+correct+'.';fb.style.color='var(--no)';c.querySelectorAll('.opt').forEach(function(x){if(String(x.textContent)===String(correct))x.classList.add('ok')})}};c.appendChild(b)})}
 
-/* ── LEARN ── */
-let N1,N2,tensN1,onesN1,tensN2,onesN2,borrowed,onesEff,tensEff,ansT,ansO,lStep;
-const SOLVE_ORDER=[1,0]; // ones first, then tens
+var S1,S2,tN1,oN1,tN2,oN2,brw,oE,tE,aT,aO,st7;
+function rn(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function gen7(){S2=rn(11,79);S1=rn(S2+1,Math.min(S2+40,99))}
+function init7(){tN1=Math.floor(S1/10);oN1=S1%10;tN2=Math.floor(S2/10);oN2=S2%10;brw=oN1<oN2;oE=brw?oN1+10:oN1;tE=brw?tN1-1:tN1;aO=oE-oN2;aT=tE-tN2;st7=0}
+function sv7(){var s=new Set();for(var i=0;i<st7;i++)s.add([1,0][i]);return s}
+function dr7(){var sv=sv7();var cur=[1,0][st7];var tbl=document.getElementById('sT7');var h='';
+h+='<div></div><div style="height:26px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:'+(cur===0?'var(--ac)':'var(--ink2)')+'">T</div><div style="height:26px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:'+(cur===1?'var(--ac)':'var(--ink2)')+'">O</div>';
+var tCr=brw&&sv.has(1);h+='<div></div><div style="height:28px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end">'+(tCr?'<span style="font-size:12px;color:#9CA3AF;text-decoration:line-through">'+tN1+'</span><span style="font-family:Grandstander,cursive;font-size:18px;font-weight:900;color:var(--no)">'+tE+'</span>':'')+'</div>';
+var oBr=brw&&(cur===1||sv.has(1));h+='<div style="height:28px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end">'+(oBr?'<span style="font-family:Grandstander,cursive;font-size:18px;font-weight:900;color:var(--no)">'+oE+'</span>':'')+'</div>';
+h+='<div></div><div style="width:60px;height:54px;display:flex;align-items:center;justify-content:center;font-family:Grandstander,cursive;font-size:38px;font-weight:900;color:var(--ink);border-radius:10px;'+(tCr?'text-decoration:line-through;color:#9CA3AF;font-size:32px':'')+'">'+tN1+'</div>';
+h+='<div style="width:60px;height:54px;display:flex;align-items:center;justify-content:center;font-family:Grandstander,cursive;font-size:38px;font-weight:900;color:var(--ink);border-radius:10px;'+(oBr?'text-decoration:line-through;color:#9CA3AF;font-size:32px':'')+'">'+oN1+'</div>';
+h+='<div style="width:52px;height:54px;display:flex;align-items:center;justify-content:center;font-family:Grandstander,cursive;font-size:30px;font-weight:900;color:var(--no)">−</div><div style="width:60px;height:54px;display:flex;align-items:center;justify-content:center;font-family:Grandstander,cursive;font-size:38px;font-weight:900">'+tN2+'</div><div style="width:60px;height:54px;display:flex;align-items:center;justify-content:center;font-family:Grandstander,cursive;font-size:38px;font-weight:900">'+oN2+'</div>';
+h+='<div></div><div style="grid-column:2/4;height:3px;background:var(--ink);border-radius:2px;margin:2px 0"></div><div style="display:none"></div>';
+h+='<div></div>';
+[0,1].forEach(function(i){var v=i===0?aT:aO;if(sv.has(i))h+='<div style="width:60px;height:60px;display:flex;align-items:center;justify-content:center;font-family:Grandstander,cursive;font-size:38px;font-weight:900;color:var(--ok);border-radius:12px;background:#DCFCE7;border:2px solid #86EFAC">'+v+'</div>';else if(i===cur)h+='<div style="width:60px;height:60px;display:flex;align-items:center;justify-content:center;border-radius:12px;border:2px solid var(--ac);background:rgba(0,0,0,.02)" id="cc7"><input id="ci7" type="number" min="0" max="9" placeholder="?" autocomplete="off" style="font-family:Grandstander,cursive;font-size:38px;font-weight:900;width:48px;height:48px;border:none;background:transparent;text-align:center;color:var(--ink);outline:none;-moz-appearance:textfield"></div>';else h+='<div style="width:60px;height:60px;display:flex;align-items:center;justify-content:center;font-family:Grandstander,cursive;font-size:34px;color:#D1D5DB">_</div>'});
+tbl.innerHTML=h;var inp=document.getElementById('ci7');if(inp){inp.oninput=function(){if(inp.value.length>1)inp.value=inp.value.slice(-1)};inp.onkeydown=function(e){if(e.key==='Enter')ck7()};inp.focus()}}
+function bi7(){var cur=[1,0][st7];var h;if(cur===1){if(brw)h='<b>O column:</b> '+oN1+' < '+oN2+', so <span style="color:var(--no);font-weight:900">borrow 10</span>. '+oE+' − '+oN2+' = <b>'+aO+'</b>.';else h='<b>O column:</b> '+oN1+' − '+oN2+' = <b>'+aO+'</b>.'}else{if(brw)h='<b>T column:</b> After borrowing, top is <b>'+tE+'</b>. '+tE+' − '+tN2+' = <b>'+aT+'</b>.';else h='<b>T column:</b> '+tN1+' − '+tN2+' = <b>'+aT+'</b>.'}document.getElementById('in7').innerHTML=h}
+function ck7(){var cur=[1,0][st7];var cor=cur===1?aO:aT;var inp=document.getElementById('ci7');if(!inp)return;var v=parseInt(inp.value);var fb=document.getElementById('f7');if(isNaN(v)){fb.textContent='Type a digit.';fb.style.color='var(--no)';return}if(v===cor){fb.textContent='✓';fb.style.color='var(--ok)';st7++;setTimeout(function(){fb.textContent='';if(st7>=2){dr7();document.getElementById('dn7').style.display='block';document.getElementById('dn7').textContent='🎉 '+S1+' − '+S2+' = '+(S1-S2);document.getElementById('in7').style.opacity='.3';document.getElementById('go7').style.display='none'}else{dr7();bi7()}},400)}else{fb.textContent='Try again.';fb.style.color='var(--no)';inp.value='';inp.focus()}}
+function np7(){gen7();init7();document.getElementById('dn7').style.display='none';document.getElementById('in7').style.opacity='1';document.getElementById('go7').style.display='inline-block';document.getElementById('f7').textContent='';dr7();bi7()}
+np7();
+var p7a=0;function np7p(){var b=rn(11,79);var a=rn(b+1,Math.min(b+40,99));p7a=a-b;document.getElementById('p7Q').textContent=a+' − '+b+' = ?';document.getElementById('p7F').textContent='';mkOpts('p7O',pool4(p7a,1,99),p7a,'p7F')}np7p();
 
-function rand(a,b){return Math.floor(Math.random()*(b-a+1))+a;}
-
-function generate(){N2=rand(11,79);N1=rand(N2+1,Math.min(N2+40,99));}
-
-function init(){
-  tensN1=Math.floor(N1/10);onesN1=N1%10;
-  tensN2=Math.floor(N2/10);onesN2=N2%10;
-  borrowed=onesN1<onesN2;
-  onesEff=borrowed?onesN1+10:onesN1;
-  tensEff=borrowed?tensN1-1:tensN1;
-  ansO=onesEff-onesN2;ansT=tensEff-tensN2;
-  lStep=0;
-}
-
-function draw(){
-  const solved=new Set(SOLVE_ORDER.slice(0,lStep));
-  const cur=SOLVE_ORDER[lStep];
-  const tbl=document.getElementById('sumTable');
-  const isMob=window.innerWidth<400;const cw=isMob?50:64;const ow=isMob?38:52;tbl.style.gridTemplateColumns=`${ow}px ${cw}px ${cw}px`;
-
-  let html='';
-
-  // header
-  html+=`<div></div><div class="hdr${cur===0?' active-col':''}">T</div><div class="hdr${cur===1?' active-col':''}">O</div>`;
-
-  // borrow row
-  html+=`<div></div>`;
-  // tens borrow display
-  const tCrossed=borrowed&&solved.has(1);
-  html+=`<div class="borrow-cell">${tCrossed?`<span class="borrow-old">${tensN1}</span><span class="borrow-new">${tensEff}</span>`:''}</div>`;
-  // ones borrow display
-  const oBorrow=borrowed&&(cur===1||solved.has(1));
-  html+=`<div class="borrow-cell">${oBorrow?`<span class="borrow-new">${onesEff}</span>`:''}</div>`;
-
-  // N1 row
-  html+=`<div></div>`;
-  html+=`<div class="num-cell${cur===0?' active-col':''}${tCrossed?' crossed':''}">${tensN1}</div>`;
-  html+=`<div class="num-cell${cur===1?' active-col':''}${oBorrow?' crossed':''}">${onesN1}</div>`;
-
-  // N2 row
-  html+=`<div class="op-cell">−</div>`;
-  html+=`<div class="num-cell${cur===0?' active-col':''}">${tensN2}</div>`;
-  html+=`<div class="num-cell${cur===1?' active-col':''}">${onesN2}</div>`;
-
-  // divider
-  html+=`<div></div><div style="grid-column:2/4;height:3px;background:var(--ink);border-radius:2px;margin:2px 0"></div><div style="display:none"></div>`;
-
-  // answer row
-  html+=`<div></div>`;
-  [0,1].forEach(i=>{
-    if(solved.has(i)){
-      const v=i===0?ansT:ansO;
-      html+=`<div class="ans-cell done"><input class="ans-input" value="${v}" disabled></div>`;
-    } else if(i===cur){
-      html+=`<div class="ans-cell active-col" id="curCell"><input class="ans-input" id="curIn" type="number" min="0" max="9" placeholder="?" autocomplete="off"></div>`;
-    } else {
-      html+=`<div class="ans-cell"><span class="blank-dig">_</span></div>`;
-    }
-  });
-
-  tbl.innerHTML=html;
-  const inp=document.getElementById('curIn');
-  if(inp){
-    inp.oninput=()=>{if(inp.value.length>1)inp.value=inp.value.slice(-1);};
-    inp.onkeydown=e=>{if(e.key==='Enter')check();};
-    inp.focus();
-  }
-}
-
-function buildInstr(){
-  const cur=SOLVE_ORDER[lStep];
-  let html;
-  if(cur===1){
-    if(borrowed){
-      html=`<strong>O column</strong>: ${onesN1} is smaller than ${onesN2}, so we <span class="borrow-note">borrow 10 from the Tens</span>. The top digit becomes <strong>${onesEff}</strong>. ${onesEff} − ${onesN2} = <strong>${ansO}</strong>. Write <strong>${ansO}</strong>.`;
-    } else {
-      html=`<strong>O column</strong>: ${onesN1} − ${onesN2} = <strong>${ansO}</strong>. Write <strong>${ansO}</strong>.`;
-    }
-  } else {
-    if(borrowed){
-      html=`<strong>T column</strong>: We borrowed 1, so the top tens digit is now <strong>${tensEff}</strong>. ${tensEff} − ${tensN2} = <strong>${ansT}</strong>. Write <strong>${ansT}</strong>.`;
-    } else {
-      html=`<strong>T column</strong>: ${tensN1} − ${tensN2} = <strong>${ansT}</strong>. Write <strong>${ansT}</strong>.`;
-    }
-  }
-  document.getElementById('instrBox').innerHTML=html;
-}
-
-function check(){
-  const cur=SOLVE_ORDER[lStep];const correct=cur===1?ansO:ansT;
-  const inp=document.getElementById('curIn');if(!inp)return;
-  const v=parseInt(inp.value);const fb=document.getElementById('fb');
-  if(isNaN(v)){fb.textContent='Type a digit (0–9).';fb.className='fb no';return;}
-  if(v===correct){
-    fb.textContent='Correct!';fb.className='fb ok';
-    document.getElementById('curCell').classList.replace('active-col','done');
-    lStep++;
-    setTimeout(()=>{fb.textContent='';if(lStep>=SOLVE_ORDER.length)done();else{draw();buildInstr();}},500);
-  } else {
-    fb.textContent='Not right — re-read the instruction and try again.';fb.className='fb no';
-    const cell=document.getElementById('curCell');cell.classList.add('err');
-    inp.value='';inp.focus();
-    setTimeout(()=>cell.classList.remove('err'),400);
-  }
-}
-
-function done(){
-  draw();
-  const banner=document.getElementById('doneBanner');
-  banner.style.display='block';banner.textContent=N1+' − '+N2+' = '+(N1-N2)+'. Well done!';
-  document.getElementById('instrBox').style.opacity='.4';
-  document.getElementById('goBtn').style.display='none';
-  document.getElementById('fb').textContent='';
-}
-
-function newProblem(){
-  generate();init();
-  document.getElementById('doneBanner').style.display='none';
-  document.getElementById('instrBox').style.opacity='1';
-  document.getElementById('goBtn').style.display='inline-block';
-  document.getElementById('fb').textContent='';document.getElementById('fb').className='fb';
-  draw();buildInstr();
-}
-newProblem();
-
-/* ── PRACTICE ── */
-let correct=0,total=0,pracAns=0;
-function updateScore(){document.getElementById('scoreDisplay').textContent=correct+' correct / '+total+' total';}
-
-function newPrac(){
-  const b=rand(11,79);const a=rand(b+1,Math.min(b+40,99));pracAns=a-b;
-  document.getElementById('pracProblem').textContent=a+' − '+b+' = ?';
-  document.getElementById('pracInput').value='';
-  document.getElementById('pracFb').textContent='';
-}
-function checkPrac(){
-  const v=parseInt(document.getElementById('pracInput').value);
-  const fb=document.getElementById('pracFb');
-  if(isNaN(v)){fb.textContent='Type your answer.';fb.style.color='var(--ink2)';return;}
-  total++;
-  if(v===pracAns){correct++;fb.textContent='Correct! The answer is '+pracAns+'.';fb.style.color='var(--success)';}
-  else{fb.textContent='Not quite. The answer is '+pracAns+'. Use column subtraction — borrow if needed!';fb.style.color='var(--error)';}
-  updateScore();
-}
-newPrac();
 </script>
 </body>
 </html>
