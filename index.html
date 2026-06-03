@@ -23,22 +23,8 @@ html,body{width:100%;min-height:100vh;font-family:'Poppins',sans-serif;backgroun
 .cb{position:absolute;top:0;left:0;bottom:0;width:5px;border-radius:var(--r) 0 0 var(--r);background:var(--ac)}
 .ct{font-family:'Grandstander',cursive;font-size:15px;font-weight:800;padding-left:14px;margin-bottom:3px;line-height:1.3}
 .cs{font-size:12px;color:var(--ink2);padding-left:14px;margin-bottom:14px;line-height:1.6}
-/* stepper */
-.cr{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
-.cg{display:flex;align-items:center;gap:8px;background:rgba(0,0,0,.03);border-radius:12px;padding:8px 12px;border:1.5px solid rgba(0,0,0,.06)}
-.cl{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;min-width:48px}
-.sb{width:34px;height:34px;border-radius:50%;border:none;font-size:18px;font-weight:900;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.12s;box-shadow:0 2px 6px rgba(0,0,0,.15)}
-.sb:active{transform:scale(.88)}
-.sv{font-family:'Grandstander',cursive;font-size:28px;font-weight:900;min-width:28px;text-align:center}
-/* blocks */
-.bx{background:rgba(0,0,0,.02);border-radius:14px;border:1.5px solid rgba(0,0,0,.06);padding:12px;min-height:60px;display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;margin-bottom:14px}
-.flat{display:grid;grid-template-columns:repeat(10,8px);gap:1px}.flat-c{width:8px;height:8px;border-radius:1px;opacity:.8}
-.rod{display:flex;flex-direction:column;gap:1px}.rod-c{width:10px;height:10px;border-radius:1px;opacity:.8}
-.units{display:flex;flex-wrap:wrap;gap:2px;max-width:58px;align-self:flex-end}.unit-c{width:10px;height:10px;border-radius:2px;opacity:.8}
-.sep{width:1px;background:#D1D5DB;align-self:stretch;margin:0 3px}
-/* options */
 .opts{display:flex;gap:8px;flex-wrap:wrap}
-.opt{font-family:'Grandstander',cursive;font-size:22px;font-weight:800;min-width:72px;height:54px;border-radius:16px;border:2.5px solid rgba(0,0,0,.08);background:#fff;cursor:pointer;color:var(--ink);display:flex;align-items:center;justify-content:center;transition:.15s;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.opt{font-family:'Grandstander',cursive;font-size:20px;font-weight:800;min-width:72px;height:54px;border-radius:16px;border:2.5px solid rgba(0,0,0,.08);background:#fff;cursor:pointer;color:var(--ink);display:flex;align-items:center;justify-content:center;transition:.15s;box-shadow:0 2px 8px rgba(0,0,0,.05);padding:0 12px}
 .opt:hover{border-color:var(--ac);transform:translateY(-2px)}
 .opt.ok{background:#DCFCE7;border-color:var(--ok);color:#15803D;animation:pop .3s}
 .opt.no{background:#FEE2E2;border-color:var(--no);color:var(--no);animation:shk .35s}
@@ -52,18 +38,10 @@ html,body{width:100%;min-height:100vh;font-family:'Poppins',sans-serif;backgroun
 .btn-p{background:var(--ac);color:#fff}
 .btn-g{background:#fff;color:var(--ink2);border:1.5px solid rgba(0,0,0,.1)}
 .btn-g:hover{border-color:var(--ac);color:var(--ac)}
-.chal{background:rgba(0,0,0,.02);border-radius:16px;padding:14px;border:1.5px dashed rgba(0,0,0,.1);margin-top:10px}
-.chal-q{font-family:'Grandstander',cursive;font-size:14px;font-weight:800;margin-bottom:10px}
-.chal-q b{color:var(--ac);font-size:22px}
-canvas{display:block;border-radius:10px}
-/* drag & tap shared */
-.tappable{cursor:pointer;user-select:none;transition:transform .15s}
-.tappable:hover{transform:scale(1.08)}
-.tappable:active{transform:scale(.92)}
-/* misc */
 .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.pill{display:inline-block;font-family:'Grandstander',cursive;font-size:14px;font-weight:800;padding:6px 18px;border-radius:30px}
 .big{font-family:'Grandstander',cursive;font-weight:900;line-height:1;text-align:center}
+.qbox{background:rgba(0,0,0,.02);border-radius:14px;padding:14px 16px;border:1.5px solid rgba(0,0,0,.06);margin-bottom:14px;font-size:15px;font-weight:600;line-height:1.7;color:var(--ink)}
+.qtag{display:inline-block;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;background:var(--ac);color:#fff;border-radius:20px;padding:2px 10px;margin-bottom:8px}
 </style>
 </head>
 <body>
@@ -93,12 +71,14 @@ canvas{display:block;border-radius:10px}
     </div>
   </div>
 </div>
+
 <div class="pnl" id="p-practice">
   <div class="card"><div class="cb"></div>
     <div class="ct">Solve it</div>
-    <div class="cs">Subtract. Borrow if the top digit is smaller.</div>
-    <div class="big" style="font-size:28px;margin-bottom:14px" id="p7Q"></div>
-    <div class="opts" id="p7O"></div><div class="fb" id="p7F"></div>
+    <div class="cs">Some questions are calculations, some are word problems. Pick the right answer.</div>
+    <div class="qbox" id="p7Q"></div>
+    <div class="opts" id="p7O"></div>
+    <div class="fb" id="p7F"></div>
     <button class="nbtn" onclick="np7p()">Next →</button>
   </div>
 </div>
@@ -107,139 +87,118 @@ canvas{display:block;border-radius:10px}
 <script>
 function sw(n){document.querySelectorAll('.tab').forEach(function(t){t.classList.toggle('on',t.textContent.toLowerCase()===n)});document.querySelectorAll('.pnl').forEach(function(p){var a=p.id==='p-'+n;p.classList.toggle('on',a);p.style.display=a?'flex':'none'})}
 document.getElementById('p-practice').style.display='none';
-function pool4(ans,lo,hi){var s=new Set([ans]);var i=0;while(s.size<4&&i<50){i++;var w=ans+Math.round(Math.random()*8-4);if(w>=lo&&w<=hi&&w!==ans)s.add(w)}return[...s].sort(function(){return Math.random()-.5})}
-function mkOpts(cid,items,correct,fid){var c=document.getElementById(cid);c.innerHTML='';items.forEach(function(n){var b=document.createElement('button');b.className='opt';b.textContent=n;b.onclick=function(){c.querySelectorAll('.opt').forEach(function(x){x.onclick=null});var fb=document.getElementById(fid);if(String(n)===String(correct)){b.classList.add('ok');fb.textContent='🎉 Correct!';fb.style.color='var(--ok)'}else{b.classList.add('no');fb.textContent='The answer is '+correct+'.';fb.style.color='var(--no)';c.querySelectorAll('.opt').forEach(function(x){if(String(x.textContent)===String(correct))x.classList.add('ok')})}};c.appendChild(b)})}
-
-var S1,S2,tN1,oN1,tN2,oN2,brw,oE,tE,aT,aO,st7;
-/* st7: 0=ones step, 1=tens step, 2=done */
 
 function rn(a,b){return Math.floor(Math.random()*(b-a+1))+a}
-function gen7(){S2=rn(11,79);S1=rn(S2+1,Math.min(S2+50,99))}
-function init7(){
-  tN1=Math.floor(S1/10);oN1=S1%10;
-  tN2=Math.floor(S2/10);oN2=S2%10;
-  brw=oN1<oN2;
-  oE=brw?oN1+10:oN1;
-  tE=brw?tN1-1:tN1;
-  aO=oE-oN2;
-  aT=tE-tN2;
-  st7=0;
+
+function pool4(ans,lo,hi){
+  var s=new Set([ans]);var i=0;
+  while(s.size<4&&i<50){i++;var w=ans+rn(-12,12);if(w>=lo&&w<=hi&&w!==ans)s.add(w)}
+  return[...s].sort(function(){return Math.random()-.5});
 }
 
-function dr7(){
-  var oSolved=st7>0;   /* ones column already answered correctly */
-  var tSolved=st7>1;   /* tens column already answered correctly */
-  var tbl=document.getElementById('sT7');var html='';
+function mkOpts(items,correct,fid){
+  var c=document.getElementById('p7O');c.innerHTML='';
+  var fb=document.getElementById('p7F');fb.textContent='';
+  items.forEach(function(n){
+    var b=document.createElement('button');b.className='opt';b.textContent=n;
+    b.onclick=function(){
+      c.querySelectorAll('.opt').forEach(function(x){x.onclick=null});
+      if(n===correct){
+        b.classList.add('ok');
+        fb.innerHTML='<div style="background:#DCFCE7;border:2px solid #86EFAC;border-radius:12px;padding:12px;animation:pop .3s">🎉 Correct!</div>';
+        fb.style.color='var(--ok)';
+      } else {
+        b.classList.add('no');
+        fb.textContent='The answer is '+correct+'.';fb.style.color='var(--no)';
+        c.querySelectorAll('.opt').forEach(function(x){if(x.textContent===String(correct))x.classList.add('ok')});
+      }
+    };
+    c.appendChild(b);
+  });
+}
 
-  /* ── Column header labels ── */
+/* ── Learn tab ── */
+var S1,S2,tN1,oN1,tN2,oN2,brw,oE,tE,aT,aO,st7;
+function gen7(){S2=rn(11,79);S1=rn(S2+1,Math.min(S2+50,99))}
+function init7(){
+  tN1=Math.floor(S1/10);oN1=S1%10;tN2=Math.floor(S2/10);oN2=S2%10;
+  brw=oN1<oN2;oE=brw?oN1+10:oN1;tE=brw?tN1-1:tN1;aO=oE-oN2;aT=tE-tN2;st7=0;
+}
+function dr7(){
+  var oSolved=st7>0;var tSolved=st7>1;
+  var tbl=document.getElementById('sT7');var html='';
   html+='<div></div>';
   html+='<div style="height:24px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:'+(st7===1?'var(--ac)':'var(--ink2)')+'">T</div>';
   html+='<div style="height:24px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:'+(st7===0?'var(--ac)':'var(--ink2)')+'">O</div>';
-
-  /* ── Borrow annotation row ── */
   html+='<div></div>';
-  /* tens: show strikethrough + new value only after ones is done (borrow was revealed) */
   var showBrwT=brw&&oSolved;
   html+='<div style="height:28px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end">';
   if(showBrwT)html+='<span style="font-size:11px;color:#9CA3AF;text-decoration:line-through;line-height:1">'+tN1+'</span><span style="font-family:Grandstander,cursive;font-size:16px;font-weight:900;color:var(--no);line-height:1">'+tE+'</span>';
   html+='</div>';
-  /* ones: show the +10 only if currently on ones and needs borrow */
   var showBrwO=brw&&st7===0;
   html+='<div style="height:28px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end">';
   if(showBrwO)html+='<span style="font-family:Grandstander,cursive;font-size:15px;font-weight:900;color:var(--no);line-height:1">'+oE+'</span>';
   html+='</div>';
-
-  /* ── Top number row ── */
   html+='<div></div>';
-  /* tens digit — show crossed if borrow happened and ones solved */
   html+='<div style="width:56px;height:52px;display:flex;align-items:center;justify-content:center;font-family:Grandstander,cursive;font-size:36px;font-weight:900;border-radius:9px;'+(st7===1?'background:rgba(0,0,0,.04)':'')+';color:'+(showBrwT?'#9CA3AF':'var(--ink)')+'">';
   if(showBrwT)html+='<s style="color:#9CA3AF;font-size:30px">'+tN1+'</s>';else html+=tN1;
   html+='</div>';
-  /* ones digit — show crossed if borrow */
   html+='<div style="width:56px;height:52px;display:flex;align-items:center;justify-content:center;font-family:Grandstander,cursive;font-size:36px;font-weight:900;border-radius:9px;'+(st7===0?'background:rgba(0,0,0,.04)':'')+'">';
   if(showBrwO)html+='<s style="color:#9CA3AF;font-size:30px">'+oN1+'</s>';else html+=oN1;
   html+='</div>';
-
-  /* ── Minus sign + bottom number ── */
   html+='<div style="width:44px;height:52px;display:flex;align-items:center;justify-content:center;font-family:Grandstander,cursive;font-size:28px;font-weight:900;color:var(--no)">−</div>';
   html+='<div style="width:56px;height:52px;display:flex;align-items:center;justify-content:center;font-family:Grandstander,cursive;font-size:36px;font-weight:900;'+(st7===1?'border-radius:9px;background:rgba(0,0,0,.04)':'')+'">'+tN2+'</div>';
   html+='<div style="width:56px;height:52px;display:flex;align-items:center;justify-content:center;font-family:Grandstander,cursive;font-size:36px;font-weight:900;'+(st7===0?'border-radius:9px;background:rgba(0,0,0,.04)':'')+'">'+oN2+'</div>';
-
-  /* ── Separator ── */
   html+='<div></div><div style="grid-column:2/4;height:3px;background:var(--ink);border-radius:2px;margin:2px 0"></div><div style="display:none"></div>';
-
-  /* ── Answer row ── */
   html+='<div></div>';
-
-  /* TENS answer cell */
-  if(tSolved){
-    html+='<div style="width:56px;height:58px;display:flex;align-items:center;justify-content:center;font-family:Grandstander,cursive;font-size:36px;font-weight:900;color:var(--ok);border-radius:12px;background:#DCFCE7;border:2px solid #86EFAC">'+aT+'</div>';
-  } else if(st7===1){
-    /* kid types tens */
-    html+='<div style="width:56px;height:58px;display:flex;align-items:center;justify-content:center;border-radius:12px;border:2px solid var(--ac);background:rgba(0,0,0,.02)" id="cc7"><input id="ci7" type="number" min="0" max="9" placeholder="?" autocomplete="off" style="font-family:Grandstander,cursive;font-size:36px;font-weight:900;width:48px;height:48px;border:none;background:transparent;text-align:center;color:var(--ink);outline:none;-moz-appearance:textfield"></div>';
-  } else {
-    html+='<div style="width:56px;height:58px;display:flex;align-items:center;justify-content:center;font-family:Grandstander,cursive;font-size:32px;color:#D1D5DB">_</div>';
-  }
-
-  /* ONES answer cell */
-  if(oSolved){
-    html+='<div style="width:56px;height:58px;display:flex;align-items:center;justify-content:center;font-family:Grandstander,cursive;font-size:36px;font-weight:900;color:var(--ok);border-radius:12px;background:#DCFCE7;border:2px solid #86EFAC">'+aO+'</div>';
-  } else if(st7===0){
-    /* kid types ones */
-    html+='<div style="width:56px;height:58px;display:flex;align-items:center;justify-content:center;border-radius:12px;border:2px solid var(--ac);background:rgba(0,0,0,.02)" id="cc7"><input id="ci7" type="number" min="0" max="9" placeholder="?" autocomplete="off" style="font-family:Grandstander,cursive;font-size:36px;font-weight:900;width:48px;height:48px;border:none;background:transparent;text-align:center;color:var(--ink);outline:none;-moz-appearance:textfield"></div>';
-  } else {
-    html+='<div style="width:56px;height:58px;display:flex;align-items:center;justify-content:center;font-family:Grandstander,cursive;font-size:32px;color:#D1D5DB">_</div>';
-  }
-
+  if(tSolved){html+='<div style="width:56px;height:58px;display:flex;align-items:center;justify-content:center;font-family:Grandstander,cursive;font-size:36px;font-weight:900;color:var(--ok);border-radius:12px;background:#DCFCE7;border:2px solid #86EFAC">'+aT+'</div>'}
+  else if(st7===1){html+='<div style="width:56px;height:58px;display:flex;align-items:center;justify-content:center;border-radius:12px;border:2px solid var(--ac);background:rgba(0,0,0,.02)" id="cc7"><input id="ci7" type="number" min="0" max="9" placeholder="?" autocomplete="off" style="font-family:Grandstander,cursive;font-size:36px;font-weight:900;width:48px;height:48px;border:none;background:transparent;text-align:center;color:var(--ink);outline:none;-moz-appearance:textfield"></div>'}
+  else{html+='<div style="width:56px;height:58px;display:flex;align-items:center;justify-content:center;font-family:Grandstander,cursive;font-size:32px;color:#D1D5DB">_</div>'}
+  if(oSolved){html+='<div style="width:56px;height:58px;display:flex;align-items:center;justify-content:center;font-family:Grandstander,cursive;font-size:36px;font-weight:900;color:var(--ok);border-radius:12px;background:#DCFCE7;border:2px solid #86EFAC">'+aO+'</div>'}
+  else if(st7===0){html+='<div style="width:56px;height:58px;display:flex;align-items:center;justify-content:center;border-radius:12px;border:2px solid var(--ac);background:rgba(0,0,0,.02)" id="cc7"><input id="ci7" type="number" min="0" max="9" placeholder="?" autocomplete="off" style="font-family:Grandstander,cursive;font-size:36px;font-weight:900;width:48px;height:48px;border:none;background:transparent;text-align:center;color:var(--ink);outline:none;-moz-appearance:textfield"></div>'}
+  else{html+='<div style="width:56px;height:58px;display:flex;align-items:center;justify-content:center;font-family:Grandstander,cursive;font-size:32px;color:#D1D5DB">_</div>'}
   tbl.innerHTML=html;
   var inp=document.getElementById('ci7');
   if(inp){inp.oninput=function(){if(inp.value.length>1)inp.value=inp.value.slice(-1)};inp.onkeydown=function(e){if(e.key==='Enter')ck7()};inp.focus()}
 }
-
 function bi7(){
   var h;
-  if(st7===0){
-    if(brw)h='<b>Ones column:</b> '+oN1+' is less than '+oN2+', so borrow 10 from the tens. The ones become '+oE+'. Now what is '+oE+' − '+oN2+'?';
-    else h='<b>Ones column:</b> What is '+oN1+' − '+oN2+'?';
-  } else {
-    if(brw)h='<b>Tens column:</b> You borrowed 1 ten, so the tens digit becomes '+tE+'. What is '+tE+' − '+tN2+'?';
-    else h='<b>Tens column:</b> What is '+tN1+' − '+tN2+'?';
-  }
+  if(st7===0){if(brw)h='<b>Ones column:</b> '+oN1+' is less than '+oN2+', so borrow 10 from the tens. Ones become '+oE+'. What is '+oE+' − '+oN2+'?';else h='<b>Ones column:</b> What is '+oN1+' − '+oN2+'?'}
+  else{if(brw)h='<b>Tens column:</b> You borrowed 1 ten, so tens digit is now '+tE+'. What is '+tE+' − '+tN2+'?';else h='<b>Tens column:</b> What is '+tN1+' − '+tN2+'?'}
   document.getElementById('in7').innerHTML=h;
 }
-
 function ck7(){
   var inp=document.getElementById('ci7');if(!inp)return;
   var v=parseInt(inp.value);var fb=document.getElementById('f7');
   if(isNaN(v)||v<0||v>9){fb.textContent='Type a single digit (0–9).';fb.style.color='var(--no)';inp.value='';inp.focus();return}
   var cor=st7===0?aO:aT;
   if(v===cor){
-    fb.textContent='✓ Correct!';fb.style.color='var(--ok)';
-    st7++;
-    setTimeout(function(){
-      fb.textContent='';
-      if(st7>=2){
-        dr7();
-        document.getElementById('dn7').style.display='block';
-        document.getElementById('dn7').textContent='🎉 '+S1+' − '+S2+' = '+(S1-S2);
-        document.getElementById('in7').style.opacity='.3';
-        document.getElementById('go7').style.display='none';
-      } else {
-        dr7();bi7();
-      }
-    },500);
-  } else {
-    fb.textContent='Not quite — try again!';fb.style.color='var(--no)';inp.value='';inp.focus();
-  }
+    fb.textContent='✓ Correct!';fb.style.color='var(--ok)';st7++;
+    setTimeout(function(){fb.textContent='';if(st7>=2){dr7();document.getElementById('dn7').style.display='block';document.getElementById('dn7').textContent='🎉 '+S1+' − '+S2+' = '+(S1-S2);document.getElementById('in7').style.opacity='.3';document.getElementById('go7').style.display='none'}else{dr7();bi7()}},500);
+  } else {fb.textContent='Not quite — try again!';fb.style.color='var(--no)';inp.value='';inp.focus()}
 }
-
 function np7(){gen7();init7();document.getElementById('dn7').style.display='none';document.getElementById('in7').style.opacity='1';document.getElementById('go7').style.display='inline-block';document.getElementById('f7').textContent='';dr7();bi7()}
 np7();
 
-var p7a=0;
-function np7p(){var b=rn(11,79);var a=rn(b+1,Math.min(b+50,99));p7a=a-b;document.getElementById('p7Q').textContent=a+' − '+b+' = ?';document.getElementById('p7F').textContent='';mkOpts('p7O',pool4(p7a,1,99),p7a,'p7F')}
-np7p();
+/* ── Practice tab: calculation + word problems ── */
+var SUB_WORDS=[
+  function(a,b){return{tag:'Word problem',q:'Priya had <b>'+a+'</b> marbles. She gave <b>'+b+'</b> to her brother. How many marbles does she have left?',ans:a-b}},
+  function(a,b){return{tag:'Word problem',q:'A bus had <b>'+a+'</b> passengers. At the stop, <b>'+b+'</b> got off. How many passengers are still on the bus?',ans:a-b}},
+  function(a,b){return{tag:'Word problem',q:'A shopkeeper had <b>'+a+'</b> apples. He sold <b>'+b+'</b> apples during the day. How many are left?',ans:a-b}},
+  function(a,b){return{tag:'Word problem',q:'Rohan scored <b>'+a+'</b> points in a game. He lost <b>'+b+'</b> points. What is his score now?',ans:a-b}},
+  function(a,b){return{tag:'Word problem',q:'A library had <b>'+a+'</b> books. Students borrowed <b>'+b+'</b> books. How many books remain on the shelves?',ans:a-b}},
+  function(a,b){return{tag:'Word problem',q:'A farmer picked <b>'+a+'</b> mangoes. <b>'+b+'</b> were rotten and thrown away. How many good mangoes are left?',ans:a-b}},
+  function(a,b){return{tag:'Calculation',q:'<span style="font-family:Grandstander,cursive;font-size:26px;font-weight:900">'+a+' − '+b+' = ?</span>',ans:a-b}},
+];
 
+function np7p(){
+  var b=rn(11,79);var a=rn(b+1,Math.min(b+50,99));
+  var gen=SUB_WORDS[Math.floor(Math.random()*SUB_WORDS.length)];
+  var q=gen(a,b);
+  document.getElementById('p7Q').innerHTML='<div class="qtag">'+q.tag+'</div><div>'+q.q+'</div>';
+  mkOpts(pool4(q.ans,1,99),q.ans,'p7F');
+}
+np7p();
 </script>
 </body>
 </html>
